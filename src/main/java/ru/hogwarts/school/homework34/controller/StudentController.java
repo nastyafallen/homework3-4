@@ -51,4 +51,12 @@ public class StudentController {
         return studentService.getStudentsByAge(age);
     }
 
+    @GetMapping
+    public List<Student> findByAgeBetween(@RequestParam ("age1")int min, @RequestParam ("age2")int max) {
+        if (min < 0 || max < 0) {
+            System.out.println("Возраст не может быть меньше 0!");;
+        }
+        return studentService.findByAgeBetween(min, max);
+    }
+
 }
