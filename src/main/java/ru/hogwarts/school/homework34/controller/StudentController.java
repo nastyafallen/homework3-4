@@ -2,6 +2,7 @@ package ru.hogwarts.school.homework34.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.homework34.model.Faculty;
 import ru.hogwarts.school.homework34.model.Student;
 import ru.hogwarts.school.homework34.service.StudentService;
 import java.util.List;
@@ -22,13 +23,13 @@ public class StudentController {
         return ResponseEntity.ok(newStudent);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<Student> getStudent(@PathVariable Long id) {
-        Optional<Student> student = studentService.getStudent(id);
-        if (student.isEmpty()) {
+    @GetMapping("/find")
+    public ResponseEntity<Student> getStudent(@RequestParam("id") Long id) {
+        Optional<Student> optional = studentService.getStudent(id);
+        if (optional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(student.get());
+        return ResponseEntity.ok(optional.get());
     }
 
     @PutMapping
@@ -37,7 +38,7 @@ public class StudentController {
         return  ResponseEntity.ok(updatedStudent);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         studentService.deleteStudent(id);
         return ResponseEntity.ok().build();
@@ -59,4 +60,8 @@ public class StudentController {
         return studentService.findByAgeBetween(min, max);
     }
 
+    @GetMapping("/{id}/faculty")
+    public Faculty getFacultyById(@PathVariable Long id) {
+        return studentService.getFacultyById(id);
+    }
 }

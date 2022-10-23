@@ -1,16 +1,22 @@
 package ru.hogwarts.school.homework34.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 public class Student {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
     private String name;
     private int age;
+
+    @ManyToOne @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "faculty_id")
+    private Faculty faculty;
 
     public Student() {
     }
@@ -23,10 +29,6 @@ public class Student {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -43,6 +45,10 @@ public class Student {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public Faculty getFaculty() {
+        return faculty;
     }
 
     @Override
