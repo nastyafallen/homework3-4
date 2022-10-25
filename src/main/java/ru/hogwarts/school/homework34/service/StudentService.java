@@ -26,7 +26,7 @@ public class StudentService {
     }
 
     public Student updateStudent(long id, Student student) {
-        Optional<Student> optional = studentRepository.findById(id);
+        Optional<Student> optional = studentRepository.findStudentById(id);
         if (optional.isPresent()) {
             Student studentFromDb = optional.get();
             studentFromDb.setAge(student.getAge());
