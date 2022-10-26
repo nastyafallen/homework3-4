@@ -2,6 +2,7 @@ package ru.hogwarts.school.homework34.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.homework34.model.Faculty;
 import ru.hogwarts.school.homework34.model.Student;
 import ru.hogwarts.school.homework34.service.StudentService;
 import java.util.List;
@@ -22,13 +23,13 @@ public class StudentController {
         return ResponseEntity.ok(newStudent);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<Student> getStudent(@PathVariable Long id) {
-        Optional<Student> student = studentService.getStudent(id);
-        if (student.isEmpty()) {
+    @GetMapping("/find")
+    public ResponseEntity<Student> getStudent(@RequestParam("id") Long id) {
+        Optional<Student> optional = studentService.getStudent(id);
+        if (optional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(student.get());
+        return ResponseEntity.ok(optional.get());
     }
 
     @PutMapping
@@ -43,7 +44,7 @@ public class StudentController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
+    @GetMapping("/filter")
     public List<Student> getStudentsByAge(@RequestParam("age") int age) {
         if (age < 0) {
             System.out.println("Возраст не может быть меньше 0!");;
@@ -51,4 +52,16 @@ public class StudentController {
         return studentService.getStudentsByAge(age);
     }
 
+    @GetMapping
+    public List<Student> findByAgeBetween(@RequestParam ("age1")int min, @RequestParam ("age2")int max) {
+        if (min < 0 || max < 0) {
+            System.out.println("Возраст не может быть меньше 0!");;
+        }
+        return studentService.findByAgeBetween(min, max);
+    }
+
+    @GetMapping("/{id}/faculty")
+    public Faculty getFacultyById(@PathVariable Long id) {
+        return studentService.getFacultyById(id);
+    }
 }

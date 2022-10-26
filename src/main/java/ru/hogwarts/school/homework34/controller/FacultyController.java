@@ -1,12 +1,13 @@
 package ru.hogwarts.school.homework34.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.homework34.model.Faculty;
+import ru.hogwarts.school.homework34.model.Student;
 import ru.hogwarts.school.homework34.service.FacultyService;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/faculty")
@@ -23,8 +24,8 @@ public class FacultyController {
         return ResponseEntity.ok(newFaculty);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<Faculty> getFaculty(@PathVariable Long id) {
+    @GetMapping("/find")
+    public ResponseEntity<Faculty> getFaculty(@RequestParam("id") Long id) {
         Optional<Faculty> faculty = facultyService.getFaculty(id);
         if (faculty.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -35,9 +36,6 @@ public class FacultyController {
     @PutMapping
     public ResponseEntity<Faculty> updateFaculty(@RequestBody Faculty faculty) {
         Faculty updatedFaculty = facultyService.updateFaculty(faculty.getId(), faculty);
-        if (updatedFaculty == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
         return ResponseEntity.ok(updatedFaculty);
     }
 
@@ -47,9 +45,19 @@ public class FacultyController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
-    public List<Faculty> getFacultiesByColor(@RequestParam("color") String color) {
+    @GetMapping("{color}")
+    public List<Faculty> getFacultiesByColor(@PathVariable String color) {
         return facultyService.getFacultiesByColor(color);
+    }
+
+    @GetMapping
+    public ResponseEntity<Faculty> findByNameOrColor(@RequestParam("value") String name) {
+        return ResponseEntity.ok(facultyService.findByNameOrColor(name));
+    }
+
+    @GetMapping("/{id}/students")
+    public Set<Student> getStudentsById(@PathVariable Long id) {
+        return facultyService.getStudentsById(id);
     }
 }
 
