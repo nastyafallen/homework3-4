@@ -46,13 +46,18 @@ public class FacultyService {
         return facultyRepository.getFacultiesByColor(color);
     }
 
-    public Faculty findByNameOrColorIgnoreCase(String name, String color) {
-        return facultyRepository.findByNameOrColorIgnoreCase(name, color);
+    public Faculty findByNameOrColor(String name) {
+        return facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(name, name);
     }
 
-    public Set<Student> getStudentsByName(String name) {
-        Faculty faculty = facultyRepository.findFacultyByName(name);
-        return faculty.getStudents();
+    public Set<Student> getStudentsById(Long id) {
+        Optional<Faculty> optional = facultyRepository.findById(id);
+        if (optional.isPresent()) {
+            Faculty facultyFromDb = optional.get();
+            return facultyFromDb.getStudents();
+        } else {
+            return null;
+        }
     }
 
 }

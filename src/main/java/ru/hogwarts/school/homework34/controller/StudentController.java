@@ -38,14 +38,14 @@ public class StudentController {
         return  ResponseEntity.ok(updatedStudent);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         studentService.deleteStudent(id);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("{age}")
-    public List<Student> getStudentsByAge(@PathVariable int age) {
+    @GetMapping("/filter")
+    public List<Student> getStudentsByAge(@RequestParam("age") int age) {
         if (age < 0) {
             System.out.println("Возраст не может быть меньше 0!");;
         }
